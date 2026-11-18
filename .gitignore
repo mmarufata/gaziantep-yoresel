@@ -1,0 +1,41 @@
+
+# Ortam değişkenleri ve gizli bilgiler
+.env
+.env.*
+!.env.example
+
+# Python sanal ortamları
+venv/
+.venv/
+env/
+
+# Python önbellek dosyaları
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Flask instance ve yerel veritabanı
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Log dosyaları
+*.log
+logs/
+
+# Yedek ve geçici dosyalar
+*.bak
+*.old
+*.tmp
+*.swp
+*.dump
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editör / IDE ayarları
+.vscode/
+.idea/

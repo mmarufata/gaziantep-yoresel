@@ -1,0 +1,25 @@
+<div id="cookie-banner" class="hidden fixed bottom-0 inset-x-0 z-40 p-4 bg-green-950/95 text-white shadow-lg border-t border-yellow-600/30">
+  <div class="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+    <p class="text-sm sm:text-base flex-1 leading-relaxed">
+      Deneyiminizi iyileştirmek için çerezler kullanıyoruz.
+      <a href="{{ url_for('cerez_politikasi') }}" class="text-yellow-300 hover:underline font-semibold">Çerez Politikası</a>
+    </p>
+    <button type="button" id="cookie-accept"
+            class="shrink-0 px-5 py-2 bg-yellow-500 text-green-950 rounded-lg font-semibold hover:bg-yellow-400 transition">
+      Kabul Et
+    </button>
+  </div>
+</div>
+<script>
+(function () {
+  var banner = document.getElementById('cookie-banner');
+  var btn = document.getElementById('cookie-accept');
+  if (!banner || !btn) return;
+  if (localStorage.getItem('cookie_consent') === '1') return;
+  banner.classList.remove('hidden');
+  btn.addEventListener('click', function () {
+    localStorage.setItem('cookie_consent', '1');
+    banner.classList.add('hidden');
+  });
+})();
+</script>

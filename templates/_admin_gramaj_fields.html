@@ -1,0 +1,17 @@
+<div class="border rounded-lg p-4 bg-gray-50">
+  <label class="block text-gray-700 font-semibold mb-2">Gramaj Seçenekleri</label>
+  <p class="text-sm text-gray-500 mb-3">Birim <strong>Kg</strong> olan ürünlerde müşterilerin göreceği seçenekleri işaretleyin.</p>
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+    {% for value, label in gramaj_choices %}
+      <label class="flex items-center gap-2 text-gray-700">
+        <input type="checkbox" name="gramaj_options" value="{{ value }}"
+          {% if product is defined %}
+            {% if value in product.gramaj_list %}checked{% endif %}
+          {% elif value in [100, 500, 1000] %}
+            checked
+          {% endif %}>
+        <span>{{ label }}</span>
+      </label>
+    {% endfor %}
+  </div>
+</div>

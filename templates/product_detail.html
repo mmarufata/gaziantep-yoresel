@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicon.png') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include '_seo_head.html' %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Merienda&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #fdfaf6;
+    }
+  </style>
+</head>
+<body>
+
+  {% include '_navbar.html' %}
+
+  <!-- Ürün Detayı -->
+  <section class="p-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <!-- Ürün Görseli / Videosu -->
+    <div>
+      <div id="media-main-wrap" class="relative">
+        <img id="media-main-image"
+             src="{{ product.image or 'https://via.placeholder.com/400' }}"
+             alt="{{ product.name }}"
+             class="zoomable-image w-full max-h-[500px] object-contain rounded-lg border-4 border-green-900 shadow-lg">
+        <video id="media-main-video"
+               src="{{ product.video or '' }}"
+               controls playsinline
+               class="hidden w-full max-h-[500px] rounded-lg border-4 border-green-900 shadow-lg bg-black">
+          Tarayıcınız video etiketini desteklemiyor.
+        </video>
+      </div>
+
+      {% set thumbs = [] %}
+      {% if product.image %}{% set _ = thumbs.append({'type': 'image', 'src': product.image}) %}{% endif %}
+      {% if product.image2 %}{% set _ = thumbs.append({'type': 'image', 'src': product.image2}) %}{% endif %}
+      {% if product.video %}{% set _ = thumbs.append({'type': 'video', 'src': product.video}) %}{% endif %}
+
+      {% if thumbs|length > 1 %}
+      <div class="flex gap-3 mt-3">
+        {% for t in thumbs %}
+          {% if t.type == 'image' %}
+          <button type="button"
+                  class="media-thumb w-20 h-20 rounded-lg border-2 border-green-900/30 overflow-hidden focus:outline-none focus:border-green-900"
+                  onclick="showProductMedia('image', '{{ t.src }}')">
+            <img src="{{ t.src }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+          </button>
+          {% else %}
+          <button type="button"
+                  class="media-thumb w-20 h-20 rounded-lg border-2 border-green-900/30 overflow-hidden relative bg-black focus:outline-none focus:border-green-900 flex items-center justify-center"
+                  onclick="showProductMedia('video', '{{ t.src }}')">
+            <span class="text-white text-2xl">▶</span>
+          </button>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <script>
+        function showProductMedia(type, src) {
+          const img = document.getElementById('media-main-image');
+          const vid = document.getElementById('media-main-video');
+          if (type === 'video') {
+            vid.pause();
+            vid.src = src;
+            vid.classList.remove('hidden');
+            img.classList.add('hidden');
+          } else {
+            vid.pause();
+            vid.classList.add('hidden');
+            img.classList.remove('hidden');
+            img.src = src;
+          }
+        }
+      </script>
+      {% endif %}
+    </div>
+
+    <!-- Ürün Bilgileri -->
+    <div>
+      <div class="flex items-center gap-4 flex-wrap mb-4">
+        <h1 class="text-4xl font-bold text-green-900 mb-4">{{ product.name }}</h1>
+        <a href="https://wa.me/*****" target="_blank"
+           class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-full transition">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.57 5.934L.057 23.886a.5.5 0 0 0 .614.614l5.952-1.513A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 0 1-5.031-1.371l-.361-.214-3.733.949.966-3.633-.235-.374A9.862 9.862 0 0 1 2.1 12C2.1 6.534 6.534 2.1 12 2.1S21.9 6.534 21.9 12 17.466 21.9 12 21.9z"/>
+          </svg>
+          WhatsApp ile Sor
+        </a>
+      </div>
+      <p class="text-gray-700 text-lg mb-2"><strong>Kategori:</strong> {{ product.category }}</p>
+      {% if product.unit and product.unit != "Kg" %}
+      <p class="text-gray-700 text-lg mb-2"><strong>Birim:</strong> {{ product.unit }}</p>
+      {% endif %}
+      {% if product.description %}
+      <div class="mt-4 mb-4 bg-white/70 border border-green-900/10 rounded-lg p-4">
+        <p class="text-gray-800 leading-relaxed">{{ product.description }}</p>
+      </div>
+      {% endif %}
+      <p class="text-3xl text-red-800 font-bold mb-6">{{ "%.2f"|format(product.price) }} ₺ / {% if product.unit == "Kg" %}Kg{% else %}{{ product.unit }}{% endif %}</p>
+
+      <!-- Sepete Ekle Formu -->
+      <form action="{{ url_for('cart_add') }}" method="POST" class="space-y-4">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        {% if product.unit == "Kg" %}
+        {% set show_desc = true %}
+        {% include '_gramaj_select.html' %}
+        {% else %}
+        <input type="hidden" name="gramaj" value="">
+        {% endif %}
+        <div>
+          <label class="block text-gray-700 mb-1 font-semibold">Adet:</label>
+          <input type="number" name="qty" value="1" min="1"
+                 class="w-20 p-2 border border-green-800 rounded focus:ring-2 focus:ring-green-700">
+        </div>
+        <button type="submit" 
+                class="px-6 py-3 bg-gradient-to-r from-red-800 to-green-700 text-white rounded-lg shadow-md hover:scale-105 transition">
+          🛒 Sepete Ekle
+        </button>
+      </form>
+
+      <a href="{{ url_for('product') }}" class="inline-block mt-6 text-green-800 hover:underline">← Tüm Ürünlere Dön</a>
+    </div>
+  </section>
+
+  <!-- Yorumlar Bölümü -->
+  <section class="p-10 max-w-4xl mx-auto">
+    <h3 class="text-2xl font-bold text-green-900 mb-6">Yorumlar</h3>
+    
+    <!-- Yorum Ekleme Formu -->
+    <div class="bg-white p-6 rounded-lg shadow mb-8">
+      <h4 class="text-lg font-semibold text-gray-800 mb-4">Yorum Yap</h4>
+      <form action="{{ url_for('add_comment', product_id=product.id) }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label class="block text-gray-700 mb-1 font-semibold">Adınız</label>
+        <input type="text" name="author_name" maxlength="80" required
+               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 mb-3"
+               placeholder="Adınız veya takma adınız">
+        <label class="block text-gray-700 mb-1 font-semibold">Yorumunuz</label>
+        <textarea name="content" rows="4" required 
+                  class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 mb-3"
+                  placeholder="Yorumunuzu buraya yazın..."></textarea>
+        <button type="submit" class="px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition">
+          Yorum Gönder
+        </button>
+      </form>
+    </div>
+
+    <!-- Yorum Listesi -->
+    <div class="space-y-4">
+      {% if comments %}
+        {% for comment in comments %}
+          <div class="bg-white p-6 rounded-lg shadow">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <p class="font-semibold text-green-900">{{ comment.author_name }}</p>
+                <p class="text-sm text-gray-500">{{ comment.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+              </div>
+            </div>
+            <p class="text-gray-700 mt-2">{{ comment.content }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="bg-gray-100 p-6 rounded-lg text-center">
+          <p class="text-gray-600 italic">Henüz yorum yapılmamış. İlk yorumu siz yapın!</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {% include '_footer.html' %}
+
+  <div id="image-lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4" aria-modal="true" role="dialog">
+    <button type="button" id="lightbox-close" class="absolute top-4 right-4 text-white text-4xl leading-none hover:text-yellow-300" aria-label="Kapat">&times;</button>
+    <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl">
+  </div>
+
+  <script src="{{ url_for('static', filename='js/site.js') }}"></script>
+  {% include '_cookie_banner.html' %}
+</body>
+</html>

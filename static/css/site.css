@@ -1,0 +1,11 @@
+/* Genel tipografi — mağaza sayfaları */
+body {
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+@media (min-width: 640px) {
+  body {
+    font-size: 1.2rem;
+  }
+}

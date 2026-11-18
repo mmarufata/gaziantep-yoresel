@@ -1,0 +1,58 @@
+{# Beklenen: product. İsteğe bağlı: show_description (bool) #}
+{% set show_desc = show_description|default(false) %}
+<article class="bg-white shadow-xl border-2 border-brown-300 rounded-lg overflow-hidden flex flex-col h-full group">
+  <div class="h-44 sm:h-48 bg-gray-50 flex items-center justify-center p-2 sm:p-3 flex-shrink-0 overflow-hidden">
+    <img src="{{ product.image or 'https://via.placeholder.com/300' }}"
+         alt="{{ product.name }}"
+         class="zoomable-image max-h-full max-w-full object-contain transition-transform duration-200 group-hover:scale-[1.02]">
+  </div>
+
+  <div class="p-4 sm:p-5 flex flex-col flex-1 min-h-0">
+    <div class="flex-grow flex flex-col min-h-0">
+      <h4 class="text-xl sm:text-2xl font-extrabold text-green-900 leading-snug tracking-tight">
+        {{ product.name }}
+      </h4>
+
+      {% if show_desc %}
+      <p class="text-gray-700 text-sm sm:text-base mt-2 line-clamp-2 min-h-[2.75rem]">
+        {% if product.description %}{{ product.description }}{% else %}&nbsp;{% endif %}
+      </p>
+      {% endif %}
+
+      <p class="text-gray-600 text-base sm:text-lg font-semibold mt-2">
+        {{ "%.2f"|format(product.price) }} ₺ / {% if product.unit == "Kg" %}Kg{% else %}{{ product.unit }}{% endif %}
+      </p>
+
+      {% if product.unit == "Kg" %}
+      {% set form_id = 'cart-form-' ~ product.id %}
+      {% include '_gramaj_select.html' %}
+      {% else %}
+      <div class="mt-3 min-h-[4.5rem]" aria-hidden="true"></div>
+      {% endif %}
+    </div>
+
+    <form id="cart-form-{{ product.id }}"
+          action="{{ url_for('cart_add') }}"
+          method="post"
+          class="mt-auto pt-3 border-t border-gray-100 space-y-2">
+      <input type="hidden" name="product_id" value="{{ product.id }}">
+      {% if product.unit != "Kg" %}
+      <input type="hidden" name="gramaj" value="">
+      {% endif %}
+      <div class="flex flex-wrap gap-2 items-center">
+        <label class="text-xs sm:text-sm text-gray-600 shrink-0">Adet:</label>
+        <input type="number" name="qty" value="1" min="1"
+               class="w-16 p-2 border rounded text-sm">
+        <button type="submit"
+                class="flex-1 min-w-[8rem] px-3 py-2.5 bg-green-700 text-white rounded-lg hover:bg-green-900 text-sm sm:text-base font-semibold transition-colors">
+          🛒 Sepete Ekle
+        </button>
+      </div>
+    </form>
+
+    <a href="{{ url_for('product_detail', id=product.id) }}"
+       class="block mt-2 px-4 py-2.5 text-center bg-red-500 text-white rounded-lg hover:bg-red-700 text-sm sm:text-base font-semibold transition-colors">
+      Detay
+    </a>
+  </div>
+</article>

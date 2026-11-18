@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicon.png') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include '_seo_head.html' %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Merienda&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #fdfaf6;
+    }
+    .motif-bg {
+      background-image: url('https://i.ibb.co/7S0pKdd/motif.png'); /* Kilim motifi */
+      background-repeat: repeat;
+      background-size: 150px;
+      opacity: 0.07;
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="relative">
+
+  <div class="motif-bg"></div>
+
+  {% include '_navbar.html' %}
+
+  <!-- Başlık -->
+  <section class="p-10 text-center">
+    <div class="flex items-center justify-center gap-4 flex-wrap">
+      <h2 class="text-4xl font-bold text-green-900">Hakkımızda</h2>
+      <a href="https://wa.me/******" target="_blank"
+         class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-full transition">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.57 5.934L.057 23.886a.5.5 0 0 0 .614.614l5.952-1.513A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 0 1-5.031-1.371l-.361-.214-3.733.949.966-3.633-.235-.374A9.862 9.862 0 0 1 2.1 12C2.1 6.534 6.534 2.1 12 2.1S21.9 6.534 21.9 12 17.466 21.9 12 21.9z"/>
+        </svg>
+        WhatsApp ile Sor
+      </a>
+    </div>
+    <p class="text-gray-700 italic mt-2">"Gaziantep'in kalbinden sofralarınıza"</p>
+  </section>
+
+  <!-- İçerik -->
+  <section class="px-8 md:px-20 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      
+      <!-- Yazı Alanı -->
+      <div>
+        <h3 class="text-2xl font-bold text-red-900 mb-4">Biz Kimiz?</h3>
+        <p class="text-gray-700 leading-relaxed mb-6">
+          <span class="font-semibold text-green-900">Gaziantep Yöresel</span>, 
+          Antep’in köklü mutfak kültürünü tüm Türkiye’ye Gaziantep piyasasında ulaştırmayı amaçlayan bir girişimdir. 
+          Her bir ürünümüz, yöremizin bereketli topraklarından özenle seçilir ve doğal yöntemlerle hazırlanır.
+        </p>
+
+        <h3 class="text-2xl font-bold text-red-900 mb-4">Misyonumuz</h3>
+        <p class="text-gray-700 leading-relaxed mb-6">
+          Doğal, katkısız ve taze ürünleri sizlere Gaziantep piyasasıyla ulaştırarak Gaziantep’in eşsiz lezzetlerini sofralarınıza taşımak. 
+          Bizim için en önemli değerler; <span class="text-green-800 font-semibold">güven, kalite ve gelenek</span>.
+        </p>
+
+        <h3 class="text-2xl font-bold text-red-900 mb-4">Neden Biz?</h3>
+        <ul class="list-disc list-inside text-gray-700 leading-relaxed">
+          <li>Gaziantep’in yöresel ürünlerinde uzmanlık</li>
+          <li>Doğrudan üreticiden taze ürün</li>
+          <li>Katkısız ve doğal içerikler</li>
+          <li>Güvenilir alışveriş deneyimi</li>
+        </ul>
+      </div>
+
+      <!-- Görsel -->
+      <div class="flex items-center justify-center">
+        <img src="{{ url_for('static', filename='guven.png') }}"
+             alt="Gaziantep Yöresel - Güven"
+             class="w-full max-w-md h-auto object-contain rounded-lg shadow-xl border-4 border-green-900">
+      </div>
+    </div>
+  </section>
+
+  {% include '_footer.html' %}
+
+  {% include '_cookie_banner.html' %}
+</body>
+</html>

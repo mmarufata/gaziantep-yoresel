@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicon.png') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block seo %}
+  {% set seo_title %}{% block title %}Yasal Metin{% endblock %} | {{ site_name }}{% endset %}
+  {% set seo_description = 'Gaziantep Yöresel Ürünler yasal metinleri, sözleşmeler, gizlilik ve bilgilendirme sayfaları.' %}
+  {% endblock %}
+  {% include '_seo_head.html' %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Merienda&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #fdfaf6;
+    }
+  </style>
+</head>
+<body>
+  {% include '_navbar.html' %}
+
+  <main class="max-w-4xl mx-auto mt-8 px-4 pb-12">
+    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+      <h1 class="text-3xl sm:text-4xl font-bold text-green-900 mb-6">{% block page_heading %}{% endblock %}</h1>
+      <div class="space-y-6 text-gray-700 text-base sm:text-lg leading-relaxed">
+        {% block legal_content %}{% endblock %}
+      </div>
+      <div class="mt-8 pt-6 border-t">
+        <p class="text-sm text-gray-600">Son güncelleme: Mayıs 2026</p>
+        <p class="text-sm text-gray-600 mt-2">
+          Diğer metinler:
+          <a href="{{ url_for('mesafeli_satis') }}" class="text-green-800 hover:underline">Mesafeli Satış</a> ·
+          <a href="{{ url_for('on_bilgilendirme') }}" class="text-green-800 hover:underline">Ön Bilgilendirme</a> ·
+          <a href="{{ url_for('gizlilik_politikasi') }}" class="text-green-800 hover:underline">Gizlilik</a> ·
+          <a href="{{ url_for('kvkk_aydinlatma') }}" class="text-green-800 hover:underline">KVKK</a> ·
+          <a href="{{ url_for('cerez_politikasi') }}" class="text-green-800 hover:underline">Çerez</a> ·
+          <a href="{{ url_for('kullanim_kosullari') }}" class="text-green-800 hover:underline">Kullanım Koşulları</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  {% include '_footer.html' %}
+</body>
+</html>

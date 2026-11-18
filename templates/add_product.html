@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Ekle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">Ürün Ekle</h1>
+        <a href="{{ url_for('admin_panel') }}" class="bg-white text-blue-600 px-3 py-1 rounded-lg font-semibold hover:bg-gray-200">
+            Geri Dön
+        </a>
+    </nav>
+
+    <div class="max-w-2xl mx-auto mt-8 bg-white p-6 rounded-xl shadow-lg">
+        <h2 class="text-2xl font-semibold mb-6">Yeni Ürün Ekle</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-3 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% elif category == 'danger' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('add_product') }}" method="POST" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Ürün Adı *</label>
+                <input type="text" name="name" required 
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Kategori *</label>
+                <input type="text" name="category" required 
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Örn: Baharat, Pul Biber, Kuruluk">
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Fiyat (₺) *</label>
+                <input type="number" name="price" step="0.01" required 
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Birim</label>
+                <input type="text" name="unit" 
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Örn: Kg, Adet, 250 Gr">
+            </div>
+
+            {% include '_admin_gramaj_fields.html' %}
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Resim URL (1. görsel) *</label>
+                <input type="text" name="image" 
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="/static/images/placeholder.png">
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Resim URL (2. görsel, opsiyonel)</label>
+                <input type="text" name="image2" 
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="/static/urun-2.jpg">
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Video URL (.mp4, opsiyonel)</label>
+                <input type="text" name="video" 
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="/static/videos/urun.mp4">
+                <p class="text-sm text-gray-500 mt-1">Video dosyasını sunucuya yükleyip yolunu buraya yazın (örn: /static/videos/urun.mp4).</p>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Sıra Numarası (display_order)</label>
+                <input type="number" name="display_order" min="0" step="1"
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Küçük sayı üstte görünür (örn: 10, 20)">
+                <p class="text-sm text-gray-500 mt-1">Boş bırakılırsa otomatik en alta eklenir.</p>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Ürün Açıklaması</label>
+                <textarea name="description" rows="4"
+                          class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Ürünle ilgili kısa açıklama, içerik, kullanım önerisi..."></textarea>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="flex-1 bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 font-semibold">
+                    Ürünü Ekle
+                </button>
+                <a href="{{ url_for('manage_products') }}" class="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 font-semibold text-center">
+                    İptal
+                </a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
+

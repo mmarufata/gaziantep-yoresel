@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicon.png') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include '_seo_head.html' %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Merienda&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #fdfaf6;
+    }
+  </style>
+</head>
+<body>
+  {% include '_navbar.html' %}
+
+  <main class="max-w-4xl mx-auto mt-8 px-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% elif category == 'danger' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <div class="flex items-center justify-center gap-4 flex-wrap mb-6">
+        <h2 class="text-3xl font-bold text-green-900">Ödeme İşlemi</h2>
+        <a href="https://wa.me/*****" target="_blank"
+           class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-full transition">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.57 5.934L.057 23.886a.5.5 0 0 0 .614.614l5.952-1.513A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 0 1-5.031-1.371l-.361-.214-3.733.949.966-3.633-.235-.374A9.862 9.862 0 0 1 2.1 12C2.1 6.534 6.534 2.1 12 2.1S21.9 6.534 21.9 12 17.466 21.9 12 21.9z"/>
+          </svg>
+          WhatsApp ile Sor
+        </a>
+      </div>
+
+      <!-- Sipariş Özeti -->
+      <div class="bg-gray-50 rounded-lg p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Sipariş Özeti</h3>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Sipariş No:</span>
+            <span class="font-semibold">{{ order.order_number }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Müşteri:</span>
+            <span class="font-semibold">{{ order.customer_name }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Telefon:</span>
+            <span class="font-semibold">{{ order.phone }}</span>
+          </div>
+          <div class="pt-3 border-t">
+            <div class="flex justify-between mb-2">
+              <span class="text-gray-600">Ara Toplam:</span>
+              <span>{{ "%.2f"|format(order.total_amount - order.shipping_cost) }} ₺</span>
+            </div>
+            <div class="flex justify-between mb-2">
+              <span class="text-gray-600">Kargo:</span>
+              <span>{{ "%.2f"|format(order.shipping_cost) }} ₺</span>
+            </div>
+            <div class="flex justify-between text-xl font-bold text-green-900 pt-2 border-t">
+              <span>Toplam Tutar:</span>
+              <span>{{ "%.2f"|format(order.total_amount) }} ₺</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Ödeme Butonu -->
+      <div class="text-center">
+        <form id="paymentForm" method="POST" action="{{ url_for('start_paytr_payment', public_token=order.public_token) }}" >
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" >
+          <button type="submit" {% if not paytr_enabled %}disabled{% endif %} class=" px-8 py-4 bg-gradient-to-r from-green-700 to-green-900 text-white text-lg rounded-lg transition font-semibold shadow-lg {% if paytr_enabled %} hover:scale-105 {% else %} opacity-50 cursor-not-allowed {% endif %}">
+            🔒 Kredi Kartı ile Güvenli Öde
+          </button>
+        </form>
+        <p class="text-sm text-gray-500 mt-4">🔐 PayTR güvenli ödeme altyapısı <br> Kart bilgileriniz PayTR ödeme ekranında işlenir </p>
+      </div>  
+      {% if not paytr_enabled %}
+      <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <p class="text-sm text-yellow-800">
+          <strong>Ödeme sistemi devre dışı:</strong>
+          PayTR ödeme sistemini etkinleştirmek için
+          <code>PAYTR_PAYMENT_ENABLED=true</code>
+          olarak ayarlayın.
+        </p>
+      </div>
+      {% endif %}
+    </div>
+  </main>
+  <footer class="text-center text-sm sm:text-base text-gray-600 my-6 px-4 space-y-3">
+    <p>Ödeme işleminiz güvenli bir şekilde işlenmektedir.</p>
+    <nav class="flex flex-wrap justify-center gap-x-3 gap-y-1">
+      <a href="{{ url_for('mesafeli_satis') }}" class="text-green-800 hover:underline">Mesafeli Satış</a>
+      <a href="{{ url_for('on_bilgilendirme') }}" class="text-green-800 hover:underline">Ön Bilgilendirme</a>
+      <a href="{{ url_for('gizlilik_politikasi') }}" class="text-green-800 hover:underline">Gizlilik</a>
+      <a href="{{ url_for('kvkk_aydinlatma') }}" class="text-green-800 hover:underline">KVKK</a>
+      <a href="{{ url_for('cerez_politikasi') }}" class="text-green-800 hover:underline">Çerez</a>
+      <a href="{{ url_for('kullanim_kosullari') }}" class="text-green-800 hover:underline">Kullanım Koşulları</a>
+    </nav>
+  </footer>
+</body>
+</html>
+

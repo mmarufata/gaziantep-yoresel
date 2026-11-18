@@ -1,0 +1,16 @@
+{% if product.unit == "Kg" and product.gramaj_list %}
+<div class="mt-3 min-h-[4.5rem]">
+  <label class="block text-xs sm:text-sm text-gray-600 mb-1">{% if show_desc|default(false) %}Gramaj Seçin:{% else %}Gramaj:{% endif %}</label>
+  <select name="gramaj"{% if form_id %} form="{{ form_id }}"{% endif %} required class="w-28 max-w-full p-2 border rounded text-sm">
+    {% for grams in product.gramaj_list %}
+      <option value="{{ grams }}" {% if grams == 1000 %}selected{% endif %}>{{ format_gramaj(grams) }}</option>
+    {% endfor %}
+  </select>
+</div>
+{% elif product.unit == "Kg" %}
+<div class="mt-3 min-h-[4.5rem]">
+  <p class="text-xs sm:text-sm text-red-600">Gramaj seçeneği tanımlanmamış.</p>
+</div>
+{% else %}
+<div class="mt-3 min-h-[4.5rem]" aria-hidden="true"></div>
+{% endif %}

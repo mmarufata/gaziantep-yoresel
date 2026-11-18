@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicon.png') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include '_seo_head.html' %}
+  <!-- Google Ads satın alma dönüşümü -->
+  <script>
+    gtag('event', 'conversion', {
+      'send_to': 'AW-18372561650/w0JYCOGVudwcEPKV3LhE',
+      'value': {{ '%.2f'|format(order.total_amount or 0) }},
+      'currency': 'TRY',
+      'transaction_id': {{ order.order_number|tojson }}
+    });
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Merienda&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #fdfaf6;
+    }
+  </style>
+</head>
+<body>
+  <nav class="bg-gradient-to-r from-green-900 to-red-900 text-white p-4 flex justify-between items-center shadow-lg">
+    <h1 class="text-2xl font-bold">Gaziantep Yöresel</h1>
+    <a href="{{ url_for('home') }}" class="text-sm underline hover:text-yellow-300">Ana Sayfa</a>
+  </nav>
+
+  <main class="max-w-3xl mx-auto mt-12 px-4">
+    <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+      <div class="text-6xl mb-4">✅</div>
+      <h2 class="text-3xl font-bold text-green-900 mb-4">Siparişiniz Alındı!</h2>
+      <p class="text-lg text-gray-700 mb-8">Ödemeniz başarıyla tamamlandı. Siparişiniz en kısa sürede hazırlanacaktır.</p>
+
+      <!-- Sipariş Detayları -->
+      <div class="bg-gray-50 rounded-lg p-6 mb-6 text-left">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Sipariş Detayları</h3>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Sipariş No:</span>
+            <span class="font-semibold">{{ order.order_number }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">İşlem No:</span>
+            <span class="font-semibold">{{ order.transaction_id or '—' }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Toplam Tutar:</span>
+            <span class="font-bold text-green-900">{{ "%.2f"|format(order.total_amount) }} ₺</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Ödeme Durumu:</span>
+            <span class="font-semibold text-green-700">{{ order.payment_status }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sipariş İçeriği -->
+      <div class="bg-gray-50 rounded-lg p-6 mb-6 text-left">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Sipariş İçeriği</h3>
+        <div class="space-y-3">
+          {% for item in order.items %}
+            <div class="flex justify-between border-b pb-2">
+              <div>
+                <p class="font-semibold">{{ item.product_name }}</p>
+                <p class="text-sm text-gray-500">{{ item.quantity }} x {{ "%.2f"|format(item.price) }} ₺ / {{ item.unit }}</p>
+              </div>
+              <p class="font-bold">{{ "%.2f"|format(item.price * item.quantity) }} ₺</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Teslimat Bilgileri -->
+      <div class="bg-gray-50 rounded-lg p-6 mb-6 text-left">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Teslimat Adresi</h3>
+        <p class="text-gray-700">
+          {{ order.customer_name }}<br>
+          {{ order.city }} / {{ order.district }} / {{ order.neighborhood }}<br>
+          {{ order.address }}<br>
+          Tel: {{ order.phone }}
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{{ url_for('home') }}" class="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 transition">
+          Ana Sayfaya Dön
+        </a>
+        <a href="{{ url_for('product') }}" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">
+          Alışverişe Devam Et
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-center text-sm sm:text-base text-gray-600 my-6 px-4 space-y-3">
+    <p>Siparişiniz hakkında sorularınız için bizimle iletişime geçebilirsiniz.</p>
+    <nav class="flex flex-wrap justify-center gap-x-3 gap-y-1">
+      <a href="{{ url_for('mesafeli_satis') }}" class="text-green-800 hover:underline">Mesafeli Satış</a>
+      <a href="{{ url_for('on_bilgilendirme') }}" class="text-green-800 hover:underline">Ön Bilgilendirme</a>
+      <a href="{{ url_for('gizlilik_politikasi') }}" class="text-green-800 hover:underline">Gizlilik</a>
+      <a href="{{ url_for('kvkk_aydinlatma') }}" class="text-green-800 hover:underline">KVKK</a>
+      <a href="{{ url_for('cerez_politikasi') }}" class="text-green-800 hover:underline">Çerez</a>
+      <a href="{{ url_for('kullanim_kosullari') }}" class="text-green-800 hover:underline">Kullanım Koşulları</a>
+    </nav>
+  </footer>
+</body>
+</html>
+

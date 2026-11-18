@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicon.png') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include '_seo_head.html' %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Merienda&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #fdfaf6;
+    }
+    .motif-bg {
+      background-image: url('https://i.ibb.co/7S0pKdd/motif.png'); /* Kilim motifi */
+      background-repeat: repeat;
+      background-size: 150px;
+      opacity: 0.07;
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="relative">
+
+  <div class="motif-bg"></div>
+
+  {% include '_navbar.html' %}
+
+  <!-- Başlık -->
+  <section class="p-10 text-center">
+    <h2 class="text-4xl font-bold text-green-900">İletişim</h2>
+    <p class="text-gray-700 italic mt-2">“Sorularınız ve siparişleriniz için bizimle iletişime geçin”</p>
+  </section>
+
+  <!-- İletişim İçeriği -->
+  <section class="px-8 md:px-20 pb-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+    
+    <!-- İletişim Bilgileri -->
+    <div class="bg-white shadow-lg p-8 rounded-lg border-2 border-green-900">
+      <h3 class="text-2xl font-bold text-red-900 mb-6">İletişim Bilgilerimiz</h3>
+      <p class="mb-4 text-gray-700"><strong>📍 Adres:</strong> Boyno Mahallesi Lefkoşe Caddesi No:56 Şehitkamil Gaziantep</p>
+      <p class="mb-4 text-gray-700"><strong>📞 Telefon:</strong> ******</p>
+      <p class="mb-4 text-gray-700"><strong>📧 E-posta:</strong> destek@gaziantepyöresel.com.tr </p>
+      <p class="mb-4 text-gray-700"><strong>💬 WhatsApp:</strong> Hızlı sipariş için
+        <a href="https://wa.me/*****" target="_blank" rel="noopener noreferrer" class="text-green-700 font-semibold underline hover:text-green-900">tıklayın</a>
+      </p>
+    </div>
+
+    <!-- İletişim Formu -->
+    <div class="bg-white shadow-lg p-8 rounded-lg border-2 border-green-900">
+      <h3 class="text-2xl font-bold text-red-900 mb-6">Bize Mesaj Gönderin</h3>
+        <form action="{{ url_for('contact') }}" method="POST" class="space-y-4">
+          <div>
+            <label class="block text-gray-700">Adınız Soyadınız</label>
+            <input type="text" name="name" required class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-green-700">
+          </div>
+          <div>
+            <label class="block text-gray-700">E-posta</label>
+            <input type="email" name="email" required class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-green-700">
+          </div>
+          <div>
+            <label class="block text-gray-700">Mesajınız</label>
+            <textarea name="message" rows="4" required class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-green-700"></textarea>
+          </div>
+          <p class="text-sm text-gray-600">
+            Formu göndererek <a href="{{ url_for('kvkk_aydinlatma') }}" class="text-green-800 hover:underline">KVKK Aydınlatma Metni</a>'ni okuduğunuzu kabul etmiş olursunuz.
+          </p>
+          <button type="submit" class="w-full py-3 bg-gradient-to-r from-red-800 to-green-700 text-white rounded-lg hover:scale-105 transition">📩 Gönder</button>
+
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="mt-2 p-3 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% elif category == 'danger' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </form>
+
+    </div>
+
+  </section>
+
+  {% include '_footer.html' %}
+
+  {% include '_cookie_banner.html' %}
+</body>
+</html>

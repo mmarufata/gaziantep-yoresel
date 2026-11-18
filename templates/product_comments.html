@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Yorumlar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+
+    <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">Ürün Yorumları</h1>
+        <a href="{{ url_for('manage_products') }}" class="bg-white text-blue-600 px-3 py-1 rounded-lg font-semibold hover:bg-gray-200">
+            Ürünlere Dön
+        </a>
+    </nav>
+
+    <div class="max-w-4xl mx-auto mt-8 bg-white p-6 rounded-xl shadow-lg">
+
+        <div class="mb-6 pb-4 border-b">
+            <h2 class="text-2xl font-semibold text-gray-800">{{ product.name }}</h2>
+            <p class="text-gray-500 mt-1">{{ product.category }} · {{ product.price }} ₺</p>
+            <p class="text-sm text-gray-600 mt-2">Toplam {{ comments|length }} yorum</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-3 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% elif category == 'danger' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if comments %}
+            <div class="space-y-4">
+                {% for comment in comments %}
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                            <div>
+                                <p class="font-semibold text-gray-800">{{ comment.author_name }}</p>
+                                <p class="text-sm text-gray-500">{{ comment.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                            </div>
+                            <a href="{{ url_for('delete_comment', id=comment.id) }}"
+                               class="inline-block bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 text-sm text-center"
+                               onclick="return confirm('Bu yorumu silmek istediğinize emin misiniz?');">
+                                Sil
+                            </a>
+                        </div>
+                        <p class="text-gray-700 mt-3 whitespace-pre-wrap">{{ comment.content }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-600 text-center py-8">Bu ürün için henüz yorum yapılmamış.</p>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>

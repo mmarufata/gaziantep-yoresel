@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>{{ merchant_title }}</title>
+    <link>{{ merchant_link }}</link>
+    <description>{{ merchant_description }}</description>
+    <lastBuildDate>{{ generated_at.strftime('%a, %d %b %Y %H:%M:%S GMT') }}</lastBuildDate>
+{% for product in products %}
+    <item>
+      <g:id>GY-{{ product.id }}</g:id>
+      <g:title>{{ product.name }}</g:title>
+      <g:description>{{ product_description(product) }}</g:description>
+      <g:link>{{ product_url(product) }}</g:link>
+      <g:image_link>{{ product_image_url(product) }}</g:image_link>
+      <g:availability>in_stock</g:availability>
+      {% if product.unit == "Kg" and product.gramaj_list %}
+      {% set merchant_grams = 1000 %}
+        <g:price>{{ '%.2f'|format(product.price * merchant_grams / 1000.0) }} TRY</g:price>
+        <g:unit_pricing_measure>{{ merchant_grams }} g</g:unit_pricing_measure>
+        <g:unit_pricing_base_measure>1 kg</g:unit_pricing_base_measure>
+      {% else %}
+        <g:price>{{ '%.2f'|format(product.price) }} TRY</g:price>
+      {% endif %}
+      <g:condition>new</g:condition>
+      <g:brand>{{ merchant_title }}</g:brand>
+      <g:product_type>{{ product.category }}</g:product_type>
+      <g:identifier_exists>no</g:identifier_exists>
+    </item>
+{% endfor %}
+  </channel>
+</rss>

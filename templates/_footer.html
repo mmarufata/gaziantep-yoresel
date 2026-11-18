@@ -1,0 +1,29 @@
+<!-- Footer -->
+<footer class="bg-gradient-to-r from-green-900 to-red-900 text-white p-6 mt-8">
+  <nav class="max-w-5xl mx-auto mb-4 flex flex-wrap justify-center gap-x-3 gap-y-2 text-sm sm:text-base" aria-label="Yasal bilgiler">
+    <a href="{{ url_for('mesafeli_satis') }}" class="hover:text-yellow-300 underline-offset-2 hover:underline">Mesafeli Satış Sözleşmesi</a>
+    <span class="text-white/40 hidden sm:inline" aria-hidden="true">|</span>
+    <a href="{{ url_for('on_bilgilendirme') }}" class="hover:text-yellow-300 underline-offset-2 hover:underline">Ön Bilgilendirme</a>
+    <span class="text-white/40 hidden sm:inline" aria-hidden="true">|</span>
+    <a href="{{ url_for('gizlilik_politikasi') }}" class="hover:text-yellow-300 underline-offset-2 hover:underline">Gizlilik Politikası</a>
+    <span class="text-white/40 hidden sm:inline" aria-hidden="true">|</span>
+    <a href="{{ url_for('kvkk_aydinlatma') }}" class="hover:text-yellow-300 underline-offset-2 hover:underline">KVKK Aydınlatma</a>
+    <span class="text-white/40 hidden sm:inline" aria-hidden="true">|</span>
+    <a href="{{ url_for('cerez_politikasi') }}" class="hover:text-yellow-300 underline-offset-2 hover:underline">Çerez Politikası</a>
+    <span class="text-white/40 hidden sm:inline" aria-hidden="true">|</span>
+    <a href="{{ url_for('kullanim_kosullari') }}" class="hover:text-yellow-300 underline-offset-2 hover:underline">Kullanım Koşulları</a>
+  </nav>
+  <div class="max-w-5xl mx-auto mb-5">
+    <p class="text-center text-sm mb-3">Güvenli ödeme seçenekleri</p>
+    <div class="flex items-center justify-center gap-4">
+      <div class="bg-white rounded-lg px-4 py-2">
+        <img src="{{ url_for('static', filename='images/visa-icon.svg') }}" alt="Visa ile güvenli ödeme" class="h-8 w-auto">
+      </div>
+      <div class="bg-white rounded-lg px-4 py-2">
+        <img src="{{ url_for('static', filename='images/svgviewer-output.svg') }}" alt="Mastercard ile güvenli ödeme" class="h-8 w-auto">
+      </div>
+    </div>
+  </div>
+  <p class="italic text-center">“Gaziantep’in bereketi sofranıza gelsin”</p>
+  <p class="mt-2 text-center text-sm sm:text-base">© 2026 Gaziantep Yöresel Ürünler | Tüm Hakları Saklıdır</p>
+</footer>

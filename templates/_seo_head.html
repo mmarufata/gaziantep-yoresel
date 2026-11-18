@@ -1,0 +1,49 @@
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5SKTH7W8');</script>
+<!-- End Google Tag Manager --> <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18372561650"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-18372561650');
+</script>
+
+{% set page_title = seo_title|default(site_name, true) %}
+{% set page_description = seo_description|default(default_seo_description, true) %}
+{% set page_keywords = seo_keywords|default(default_seo_keywords, true) %}
+{% set page_url = seo_canonical|default(canonical_for(), true) %}
+{% set page_image = seo_image|default(default_seo_image, true) %}
+{% set page_type = seo_type|default('website', true) %}
+{% set robots_content = 'noindex, nofollow' if seo_noindex else 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' %}
+
+<title>{{ page_title }}</title>
+<meta name="description" content="{{ page_description }}">
+<meta name="keywords" content="{{ page_keywords }}">
+<meta name="author" content="{{ site_name }}">
+<meta name="robots" content="{{ robots_content }}">
+<link rel="canonical" href="{{ page_url }}">
+
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="{{ page_type }}">
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_description }}">
+<meta property="og:url" content="{{ page_url }}">
+<meta property="og:image" content="{{ page_image }}">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:description" content="{{ page_description }}">
+<meta name="twitter:image" content="{{ page_image }}">
+
+{% if seo_json_ld %}
+  {% for schema in seo_json_ld %}
+    <script type="application/ld+json">{{ schema|tojson }}</script>
+  {% endfor %}
+{% endif %}

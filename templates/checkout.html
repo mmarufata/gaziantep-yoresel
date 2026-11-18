@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicon.png') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include '_seo_head.html' %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Merienda&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <style>
+    body { font-family: 'Cormorant Garamond', serif; background-color: #fdfaf6; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  {% include '_navbar.html' %}
+
+  <main class="max-w-5xl mx-auto mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
+    <section class="lg:col-span-2 bg-white p-6 rounded-xl shadow">
+      <h2 class="text-xl font-semibold mb-4 text-green-900">Teslimat Bilgileri</h2>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="mb-4 p-3 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% elif category == 'danger' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('create_order') }}" method="POST" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Ad Soyad *</label>
+          <input type="text" name="name" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Telefon *</label>
+          <input type="tel" name="phone" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200" placeholder="05xx xxx xx xx">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">E-posta (e-fatura / bildirim için) *</label>
+          <input type="email" name="email" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200" placeholder="ornek@eposta.com">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm text-gray-700 mb-1">Şehir *</label>
+            <input type="text" name="city" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200" placeholder="Örn: Gaziantep">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-700 mb-1">İlçe *</label>
+            <input type="text" name="district" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200" placeholder="Örn: Şahinbey">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-700 mb-1">Mahalle *</label>
+            <input type="text" name="neighborhood" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200" placeholder="Örn: Karataş">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Sokak, Bina, Daire No *</label>
+          <textarea name="address" rows="3" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200" placeholder="Sokak adı, bina no, daire no vb."></textarea>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Not (isteğe bağlı)</label>
+          <textarea name="note" rows="2" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200" placeholder="Teslimat saati, kapı bilgisi vb."></textarea>
+        </div>
+
+        <!-- Bildirim Tercihi -->
+        <div class="bg-gray-50 p-4 rounded-lg border space-y-2">
+          <p class="text-sm font-semibold text-gray-800">Sipariş durum bildirimleri tercihi</p>
+          <div class="flex flex-col md:flex-row gap-3 text-sm text-gray-700">
+            <label class="inline-flex items-center space-x-2 cursor-pointer">
+              <input type="radio" name="notify_channel" value="both" checked>
+              <span>SMS + E-posta</span>
+            </label>
+            <label class="inline-flex items-center space-x-2 cursor-pointer">
+              <input type="radio" name="notify_channel" value="sms">
+              <span>Sadece SMS</span>
+            </label>
+            <label class="inline-flex items-center space-x-2 cursor-pointer">
+              <input type="radio" name="notify_channel" value="email">
+              <span>Sadece E-posta</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Yasal Onay -->
+        <div class="bg-gray-50 p-4 rounded-lg border">
+          <label class="flex items-start space-x-2 cursor-pointer">
+            <input type="checkbox" name="legal_consent" required class="mt-1">
+            <span class="text-sm sm:text-base text-gray-700 leading-relaxed">
+              <a href="{{ url_for('mesafeli_satis') }}" target="_blank" rel="noopener" class="text-green-700 hover:underline">Mesafeli Satış Sözleşmesi</a>,
+              <a href="{{ url_for('on_bilgilendirme') }}" target="_blank" rel="noopener" class="text-green-700 hover:underline">Ön Bilgilendirme Formu</a>,
+              <a href="{{ url_for('gizlilik_politikasi') }}" target="_blank" rel="noopener" class="text-green-700 hover:underline">Gizlilik Politikası</a>,
+              <a href="{{ url_for('kvkk_aydinlatma') }}" target="_blank" rel="noopener" class="text-green-700 hover:underline">KVKK Aydınlatma Metni</a> ve
+              <a href="{{ url_for('kullanim_kosullari') }}" target="_blank" rel="noopener" class="text-green-700 hover:underline">Kullanım Koşulları</a>'nı okudum, kabul ediyorum. *
+            </span>
+          </label>
+        </div>
+
+        <!-- Güvenlik İbareleri -->
+        <div class="flex items-center justify-center space-x-4 text-sm text-gray-600 py-2">
+          <span>🔒 SSL ile korumalı</span>
+          <span>🔐 3D Secure</span>
+        </div>
+
+        <button type="submit" class="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800 transition font-semibold">
+          Ödemeye Geç
+        </button>
+      </form>
+    </section>
+
+    <aside class="bg-white p-6 rounded-xl shadow space-y-4">
+      <h3 class="text-lg font-semibold text-green-900">Sepet Özeti</h3>
+      <div class="space-y-3">
+        {% for item in items %}
+          <div class="flex justify-between">
+            <div>
+              <p class="font-semibold text-gray-800">{{ item.name }}</p>
+              <p class="text-sm text-gray-500">
+                {% if item.gramaj %}
+                  {{ format_gramaj(item.gramaj) }}
+                {% else %}
+                  {{ item.unit }}
+                {% endif %}
+                x {{ item.qty }} adet
+              </p>
+              <p class="text-xs text-gray-400">{{ "%.2f"|format(item.price) }} ₺ / {% if item.gramaj %}{{ format_gramaj(item.gramaj) }}{% else %}{{ item.unit }}{% endif %}</p>
+            </div>
+            <p class="font-bold text-red-800">{{ "%.2f"|format(item.total) }} ₺</p>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="pt-3 space-y-2 border-t">
+        <div class="flex justify-between text-gray-700">
+          <span>Ara Toplam</span>
+          <span>{{ "%.2f"|format(subtotal) }} ₺</span>
+        </div>
+        <div class="flex justify-between text-gray-700">
+          <span>Kargo</span>
+          <span>{{ "%.2f"|format(shipping_cost) }} ₺</span>
+        </div>
+        <div class="flex justify-between text-lg font-bold text-green-900 pt-2 border-t">
+          <span>Genel Toplam</span>
+          <span>{{ "%.2f"|format(total) }} ₺</span>
+        </div>
+        <a href="https://wa.me/*****" target="_blank"
+           class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-full transition w-full justify-center mt-3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.57 5.934L.057 23.886a.5.5 0 0 0 .614.614l5.952-1.513A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 0 1-5.031-1.371l-.361-.214-3.733.949.966-3.633-.235-.374A9.862 9.862 0 0 1 2.1 12C2.1 6.534 6.534 2.1 12 2.1S21.9 6.534 21.9 12 17.466 21.9 12 21.9z"/>
+          </svg>
+          WhatsApp ile Sor
+        </a>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="text-center text-sm sm:text-base text-gray-600 my-6 px-4 space-y-3">
+    <p>Siparişiniz alındığında ekibimiz sizinle iletişime geçecektir.</p>
+    <nav class="flex flex-wrap justify-center gap-x-3 gap-y-1">
+      <a href="{{ url_for('mesafeli_satis') }}" class="text-green-800 hover:underline">Mesafeli Satış</a>
+      <a href="{{ url_for('on_bilgilendirme') }}" class="text-green-800 hover:underline">Ön Bilgilendirme</a>
+      <a href="{{ url_for('gizlilik_politikasi') }}" class="text-green-800 hover:underline">Gizlilik</a>
+      <a href="{{ url_for('kvkk_aydinlatma') }}" class="text-green-800 hover:underline">KVKK</a>
+      <a href="{{ url_for('cerez_politikasi') }}" class="text-green-800 hover:underline">Çerez</a>
+      <a href="{{ url_for('kullanim_kosullari') }}" class="text-green-800 hover:underline">Kullanım Koşulları</a>
+    </nav>
+  </footer>
+</body>
+</html>
+
